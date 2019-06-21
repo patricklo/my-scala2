@@ -2,7 +2,7 @@ import scala.io.BufferedSource
 import scala.io.Source._
 import java.io._
 import scala.collection.mutable.ArrayBuffer
-
+//scala 2.11.7
 class HelloScala {
 
   var varFiled = "varfile"  //会定义为private 并生成public getter(varField) setter(varField_)  可以自定义
