@@ -1,6 +1,7 @@
 import scala.io.BufferedSource
 import scala.io.Source._
 import java.io._
+import scala.collection.mutable.ArrayBuffer
 
 class HelloScala {
   //函数
@@ -51,6 +52,40 @@ class HelloScala {
       println("release")
     }
   }
+
+  def arrayCollectionUsage(size:Int) = {
+    val a = new Array[Int](size)
+    val stringArray= new Array[String](size)
+    val strArr = Array("hello","String","array")
+    a(0) = 100
+    println(a(0))
+    println(strArr)
+
+    val strArrayBuffer = ArrayBuffer("hello", "String")
+    strArrayBuffer += ("more", "elements")
+    strArrayBuffer ++= Array("more","array")
+    strArrayBuffer.insert(5,"fithSec","sixth")
+    strArrayBuffer.remove(5)
+    println(strArrayBuffer)
+    val strArrBufferFromArray = strArr.toBuffer
+    println(strArrBufferFromArray)
+
+    for(i<- 0 until strArrBufferFromArray.length)
+      print(strArrBufferFromArray(i)+", ")
+    println("")
+    //跳跃遍历
+    for(i<- 0 until (strArrayBuffer.length,2))
+      print(strArrayBuffer(i)+", ")
+    println("")
+    //从后遍历
+    for(i<- (0 until strArrBufferFromArray.length).reverse)
+      print(strArrBufferFromArray(i)+", ")
+
+    println("")
+    //使用增强for循环遍历array/arraybuffer
+    for(e <- strArrBufferFromArray)
+      print(e)
+  }
 }
 
 
@@ -65,5 +100,6 @@ object Test {
     println(pt.oneLineMethodWithReturn("patrick"))
     println(pt.lazyVar())
     pt.tryException()
+    pt.arrayCollectionUsage(10)
   }
 }
