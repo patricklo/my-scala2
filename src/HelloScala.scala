@@ -4,6 +4,16 @@ import java.io._
 import scala.collection.mutable.ArrayBuffer
 
 class HelloScala {
+
+  var varFiled = "varfile"  //会定义为private 并生成public getter(varField) setter(varField_)  可以自定义
+  // def varField_=(newValue: String) {}
+
+  val valFile = "valField"  //只会生成getter方法
+
+  private var class_name="name" //会生成private getter setter
+
+  private[this] var no_getter_setter_var = "no getter setter"   //不会生成getter setter 方法
+
   //函数
   def sayHello(name: String, age: Int) = {
     if (age > 18) {
@@ -85,6 +95,64 @@ class HelloScala {
     //使用增强for循环遍历array/arraybuffer
     for(e <- strArrBufferFromArray)
       print(e)
+
+    println("")
+    val intArr = Array(9,6,1,1,2,3,9,5,6)
+    println(intArr.sum)
+    println(intArr.max)
+    scala.util.Sorting.quickSort(intArr)
+    println(intArr)
+    println(intArr.mkString("===="))
+
+
+    //数组高级操作：转换
+    //普通方法
+    val ab = Array(1,2,3,4,5)
+    val a2 = for(ele <- ab) yield ele * ele
+
+    //高级方法
+    val abb = ab.filter(_ % 2 ==0).map(2*_)  // _ 代表每一个元素
+    val abb2 = ab.filter(_ % 2 !=0).map{2*_}  // _ 代表每一个元素
+    println(abb.mkString(","))
+    println(abb2.mkString(","))
+
+
+    val examplearray = ArrayBuffer[Int]()
+    examplearray += (1,2,3,4,5,-1,-3,-5,-7) //删除负数
+
+    var foundFirstNegative=false
+    val keepIndexes = for(i <- (0 until examplearray.length) if !foundFirstNegative || examplearray(i) >= 0) yield {
+      if (examplearray(i) < 0) foundFirstNegative = true
+      i
+    }
+    for (i <- (0 until keepIndexes.length)) { examplearray(i) = examplearray(keepIndexes(i))}
+    examplearray.trimEnd(examplearray.length - keepIndexes.length)
+    println(examplearray.mkString(","))
+  }
+
+  def mapUsage() = {
+    val ages = Map("leo"-> 20,"jen"->20,"me"->18)
+    val new_args = ages + ("patrick"->18)
+    println(new_args)
+    //ages("Leo") = 31  //默认不可修改
+    val mutable_ages = scala.collection.mutable.Map("leo"-> 20,"jen"->20,"me"->18)
+    val mutable_ages_2 = scala.collection.mutable.Map(("leo", 20),("jen",20))
+    mutable_ages("leo") = 31
+    println(mutable_ages("leo"))
+    val remove_Leo = mutable_ages - "leo"
+    println(remove_Leo)
+    for((key,value) <- mutable_ages) println(key +"::"+value)
+  }
+
+  def tupleUsage() ={
+    val t =("leo",20)
+    println(t._1)
+    println(t._2)
+    val names = Array("leo","jac","mike")
+    val ages = Array(30,24,26)
+    val nameArgsTuple = names.zip(ages)
+    println(nameArgsTuple)
+    for((name,ages) <- nameArgsTuple) println(name+":"+ages)
   }
 }
 
@@ -101,5 +169,7 @@ object Test {
     println(pt.lazyVar())
     pt.tryException()
     pt.arrayCollectionUsage(10)
+    pt.mapUsage()
+    pt.tupleUsage()
   }
 }
