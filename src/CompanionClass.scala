@@ -12,6 +12,7 @@ object CompanionClass{
 
 //抽象类
 abstract class ABSHelloClass(var message:String) {
+  val absVar: String  //抽象field
   def sayHello(name: String): Unit
 }
 
@@ -19,6 +20,8 @@ object Hello extends ABSHelloClass("hello"){
   override def sayHello(name: String) = {
     println(message +" "+name)
   }
+
+  override val absVar: String = "abs varibale from parent class"
 }
 
 
