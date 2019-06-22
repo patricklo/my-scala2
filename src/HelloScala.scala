@@ -1,7 +1,9 @@
+import scala.beans.BeanProperty
 import scala.io.BufferedSource
 import scala.io.Source._
 import java.io._
 import scala.collection.mutable.ArrayBuffer
+import scala.beans.BeanProperty
 //scala 2.11.7
 class HelloScala {
 
@@ -156,7 +158,55 @@ class HelloScala {
   }
 }
 
+class ValPrivate{
+  private var myAge = 0 //类私有,即类内部可以访问并个性
+  private[this] var privateThisAge = 100  //仅限当前实例访问,其它实例不能访问
 
+  def anotherAge_= ( newValue : Int ){//主语 value_= 是方法名字
+    if(newValue > 0) myAge = newValue
+    else println("illegal age input")
+  } //注意，scala中默认方法是public的
+
+  def anotherAge  = myAge
+  def older(s:ValPrivate)={
+    anotherAge>s.anotherAge
+  }
+}
+
+class JAVAStyleSetterGetter(@BeanProperty var name:String ){
+
+}
+
+
+class ScalaConstructor{
+  //构造器
+  //辅助构造器, 主构造器
+
+
+  //辅助构造器:
+  private var var1 = ""
+  private var var2 = ""
+  def this(var1:String){
+    this() //主构造器  this(var1) this(var1,var2) 辅助构造器
+    this.var1 = var1
+  }
+  def this(var1:String, var2:String){
+    this(var1)
+    this.var2 = var2
+  }
+}
+
+class MyClass{
+  class MyStudent(val name:String) {}
+    val students=new ArrayBuffer[MyStudent]
+    def getStudent(name:String) ={
+      new MyStudent(name)
+    }
+}
+
+
+//object 相当于class的一个实例,其构造器只会在第一次调用的时候调用一次,可用于作为单例模式的class和工作类,甚至可用于放置class对象的静态属性和成员
+//如果有同名的一个class和object,则称为伴生,Object和class必须放在同一个scala文件中,同名Object和class最大特点是可以访问彼此的private fields
 object Test {
   def main(args: Array[String]): Unit = {
     val pt = new HelloScala()
@@ -166,10 +216,35 @@ object Test {
     println(pt.dynamicParam(100, 99))
     println(pt.dynamicParam(1 to 5: _*)) // 1 到 5 加法   : _*  将参数识别为序列
     println(pt.oneLineMethodWithReturn("patrick"))
-    println(pt.lazyVar())
+    //println(pt.lazyVar())
     pt.tryException()
     pt.arrayCollectionUsage(10)
     pt.mapUsage()
     pt.tupleUsage()
+
+    var valPrivate = new ValPrivate
+    var valPrivate2 = new ValPrivate
+    valPrivate.anotherAge=30
+    println(valPrivate.older(valPrivate))
+
+    val javaStyle = new JAVAStyleSetterGetter("ppp1")
+    javaStyle.setName("ppp2")
+    println(javaStyle.getName())
+
+    val scalaConstrustor = new ScalaConstructor //调用主构造器
+    //修改主构造器,在类定义里
+    // class ScalaConstructor(Var1: String, Var2: String ){
+    val scalaConstrustor1 = new ScalaConstructor("var1") //调用辅助构造器
+    val scalaConstrustor2 = new ScalaConstructor("var1", "var2") //调用辅助构造器
+
+
+    val c1 = new MyClass
+    val s1 = c1.getStudent("leo")
+    c1.students += s1
+
+    val c2 = new MyClass
+    val s2 = c2.getStudent("leo")
+    //c1.students += s2
+
   }
 }
