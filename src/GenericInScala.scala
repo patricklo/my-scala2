@@ -43,12 +43,14 @@ class Person100(val name:String){
 
 class Student100(name: String) extends Person100(name)
 class Worker(name: String)
-//上边界bounds <:  下边界 >:
+//上边界bounds <:  下边界 bounds >:
 class Party[T <: Person100](p1: T, p2: T){def play = p1.makeFriends(p2)}
 
 
 
 //view bounds <%  上下边界的加强版： 支持可以对类型进行隐式转换，将指定的类型进行隐式转换后，再判断是否在边界指定的类型范围内
 class Dog(val name:String) {def sayHello = println("wang, wang I'm "+name)}
-implicit def dog2Person(obj: Object): Person100 = if (obj.isInstanceOf[Dog]) { val mydog = obj.asInstanceOf[Dog]; new Person100(mydog.name)} else Nil
+//SVM转换
+implicit def dog2Person(obj: Object) = if (obj.isInstanceOf[Dog]) { val mydog = obj.asInstanceOf[Dog]; new Person100(mydog.name)} else Nil
+class Party01[T <% Person100](p1: T, p2: T)
 
