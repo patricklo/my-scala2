@@ -36,6 +36,17 @@ object GenericInScala {
     val cal  = new Calculator(1,2)
     println(cal.max)
 
+    val food1 = new Meat("food1")
+    val food2 = new Meat("food2")
+    val food3 = new Meat("food3")
+    val meatPack = packFood(food1,food2,food3)
+    println(meatPack.length)
+
+
+    val master01 = new Card[Master]("master01")
+    val professional01 = new Card[Professional]("Professional01")
+    master01.enterMeeting(professional01)
+    professional01.enterMeeting(master01)
   }
 
   def getCard[T](content:T) ={
@@ -86,8 +97,33 @@ class Calculator[T: Ordering](val number1:T,val number2: T){
 }
 
 
-
 //scala中，如果要实例化一个泛型数组，就必须使用manifest context bounds,也就是说数组元素类型如果是T的话，需要为类或者函数定义[T: Manifest] 泛型类型，这样才能实例化泛型类型
 class Meat(val name: String)
 class Vegetable(val name: String)
+
+
+//scala中的协变[+T]和逆变[-T] -》非常有特色，完全解决了java泛型的一大缺憾
+//举例，java中， 如果有Professional 是Master的子类，那么Card[Professional]是不是Card[Master]的子类呢？答案： 不是
+//而在scala中，只要灵活使用协变和逆变，就可以解决java泛型的问题
+class Master
+class Professional extends Master
+
+//master及以下的名片都可以进行会议
+//class Card[+T](val name:String){
+//  def enterMeeting(card: Card[Master]): Unit ={
+//    println("welcome to the meeting")
+//  }
+//}
+//只要professional级别的,master级别不可以进，但要求professional的父类可以进来 -》 master
+class Card[-T](val name:String){
+  def enterMeeting(card: Card[Professional]): Unit ={
+    println("welcome to the meeting")
+  }
+}
+
+
+//Existential Type
+//在scala里，有一种特殊的类型参数，就是Existential Type，存在性类型，
+// Array[T] forSome { type T }
+// Array[_]   <<---  _  即为scala中存在性类型
 
