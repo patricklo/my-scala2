@@ -5,7 +5,6 @@
 //Trait类似java的接口类似 ,但又更多功能和复杂用法
 //用extends继承trait,支持多重继承traits
 object TraitScalaAdvance {
-
   def main(args: Array[String]): Unit = {
     val p = new Person005("patrick") with MyLogger
     p.sayHello
